@@ -4,7 +4,7 @@
 
 A neon, Vampire Survivors-style web game where quantum ideas (superposition, entanglement, interference) show up as weapon cards and combos, never as equations.
 
-**Status:** work in progress · Hackathon submission (Qollab)
+**Status:** Hackathon submission (Qollab x IonQ), playable PoC
 
 ## How the quantum part works
 
@@ -23,7 +23,7 @@ Status: playable 3D PoC. The four quantum cards drive the weapon through the tab
 
 ## Stack
 
-Plain JavaScript, HTML and CSS, 3D with three.js (WebGL, bloom glow). Vite for development, built as a single HTML file. Quantum calculations: Python with Qiskit in `qollab/` (planned).
+Plain JavaScript, HTML and CSS, 3D with three.js (WebGL, bloom glow). Vite for development, built as a single HTML file. Quantum calculations: Python with Qiskit in `qollab/`.
 
 ## How to run
 
@@ -56,4 +56,8 @@ Competing at the **UNICEN** node (Universidad Nacional del Centro de la Provinci
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE) (also copied in `qollab/LICENSE`). Copyright (c) 2026 Agustin Diaz Cano and Baltazar Salerno.
+
+## Run on Qollab
+
+Upload the contents of `qollab/` (`main.py`, `qgame/`, `data/weapon_table.json`, `requirements.txt`, `LICENSE`) and run `main.py`. It prints the example builds (Qiskit vs a classical model), rebuilds the 1,365-build table and checks it against the table the game uses.
