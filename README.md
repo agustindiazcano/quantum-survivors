@@ -29,25 +29,27 @@ Under the hood, your weapon is a 3-qubit register that decides the direction of 
 
 ## Screenshots
 
+![Main menu of Quantum Survivors](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/menu.png)
+
+*Main menu.*
+
 ![Gameplay: the ship fires at a wave of enemies, with the minimap and the weapon fan in the HUD](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/gameplay.png)
 
 *Gameplay. The ship fires automatically at waves of tetrahedra, cubes and octahedra. The minimap (with edge dots for off-screen enemies) and the XP bar are in the HUD. The panel at the bottom left is the **weapon fan**: the probability of each of the 8 firing directions for the current build, read from the Qiskit table.*
 
-![The card screen after a wave: three power cards to choose from](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/cards.png)
+![Card screen after a wave: Mirror, Shotgun and a regular upgrade](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/qcards.png)
 
-*Card screen. After every wave you choose one of three cards. Each card is a quantum gate, but the player only sees a friendly name and a visible effect. The order in which you pick them changes the result.*
+*Card screen. After every wave you choose one of three cards. The quantum cards (here **Mirror**, NOT gate, and **Shotgun**, Hadamard gate) show a friendly effect plus a short plain-language note about the quantum idea. The other two are **Phantom** (Phase gate, invisible alone but changes interference) and **Link** (CNOT, entanglement). The order in which you pick them changes the result.*
 
-![The four quantum cards: Mirror, Shotgun, Phantom and Link](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/quantum-cards.png)
+![The Shotgun, Phantom, Shotgun build: the weapon fan shows a single direction and the label S P S LASER](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/death-laser.png)
 
-*The four quantum cards (open the game with `?preview` to see them with their notes): **Mirror** (NOT, flips a direction bit), **Shotgun** (Hadamard, superposition), **Phantom** (Phase, invisible alone but changes interference) and **Link** (CNOT, entanglement).*
+*The Death Laser. After Shotgun, Phantom, Shotgun the weapon fan collapses to a single direction (label "S P S LASER"): the two spreads cancel by interference, while a classical random weapon would still split 50/50.*
 
-![The Death Laser fired by the Shotgun, Phantom, Shotgun combo](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/death-laser.png)
+![Output of qollab/main.py: Qiskit vs classical comparison and the table check](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/qollab-run.png)
 
-*The Death Laser. Shotgun, Phantom, Shotgun: the two spreads cancel by interference and all the shots go in one direction. A classical random weapon would still split 50/50.*
+*Output of `qollab/main.py` (excerpt): the Qiskit vs classical comparison for the Death Laser and the Link build, the 1,365-build table and the final check against the table the game uses. The full run is the one executed on Qollab.*
 
-![Output of qollab/main.py running on Qollab](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/main/docs/img/qollab-run.png)
-
-*`qollab/main.py` running on Qollab: the Qiskit vs classical comparison for each example build, the 1,365-build table and the final check against the table the game uses.*
+*Note: the gameplay and card screenshots were captured by an automated bot on a test build that offers the combo cards on purpose and reduces the damage taken, only to be able to reach the combo. The released game does not do that.*
 
 ## 2. Why does it matter, and who is it for?
 
