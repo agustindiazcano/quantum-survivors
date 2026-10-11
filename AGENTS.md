@@ -5,6 +5,9 @@ Repository: https://github.com/agustindiazcano/quantum-survivors (MIT).
 
 > **Read [CONTEXT.md](CONTEXT.md) for the original brainstorm.** It is NOT a final version and NOT a set of decisions; it only conveys what the author wants. Things will change.
 
+## Hackathon rules
+The project is a Qollab x IonQ hackathon entry. **Read [docs/RULES.md](docs/RULES.md)** before deciding how to structure the project or the game: it has the official rules plus what they imply for us (deadline Sunday 2026-10-11 19:00 ET, Qiskit is mandatory and the project must run on Qollab, theme fit Quantum Playground, MIT license, 2-3 minute public demo video, UI accessibility, disclosure of AI tools and libraries, required line `This effort is supported by Qollab & IonQ`).
+
 ## Stack
 - Plain JavaScript, HTML and CSS. No framework.
 - Either 2D (Canvas) or 3D. If 3D: WebGL through [three.js](https://threejs.org/) for rendering and models. The 2D vs 3D choice is still open.
