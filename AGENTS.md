@@ -8,6 +8,14 @@ Repository: https://github.com/agustindiazcano/quantum-survivors (MIT).
 ## Hackathon rules
 The project is a Qollab x IonQ hackathon entry. **Read [docs/RULES.md](docs/RULES.md)** before deciding how to structure the project or the game: it has the official rules plus what they imply for us (deadline Sunday 2026-10-11 19:00 ET, Qiskit is mandatory and the project must run on Qollab, theme fit Quantum Playground, MIT license, 2-3 minute public demo video, UI accessibility, disclosure of AI tools and libraries, required line `This effort is supported by Qollab & IonQ`).
 
+## Quantum weapon system
+The enemies are plain; **the quantum part is the weapons and powers**, and **every quantum calculation must run in the code delivered to Qollab** (`qollab/`, Python + Qiskit, self-contained). That code generates a table (`qollab/data/weapon_table.json`) that the game imports; the game must not re-implement the gate rules. **Read [docs/WEAPON_SYSTEM.md](docs/WEAPON_SYSTEM.md)** for the design, the plan and the open questions.
+- `qollab/` imports only `numpy` and `qiskit` (plus the standard library). Do not add dependencies without human approval.
+- `qollab/main.py` must define `main()` and end with `if __name__ == "__main__": main()`. Importing it must print nothing.
+- Tests first (TDD) for the Python side.
+- No network access and no randomness in the table generation (exact statevectors).
+- Never claim more than the code does: the game consumes a precomputed table, it does not run Qiskit live.
+
 ## Stack
 - Plain JavaScript, HTML and CSS. No framework.
 - Either 2D (Canvas) or 3D. If 3D: WebGL through [three.js](https://threejs.org/) for rendering and models. The 2D vs 3D choice is still open.

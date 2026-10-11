@@ -80,3 +80,56 @@ html, body {
 .card .name { font-weight: 900; font-size: 18px; letter-spacing: 2px; color: var(--c); text-shadow: 0 0 8px var(--c); }
 .card .desc { font-family: 'Segoe UI', sans-serif; font-size: 14px; color: #cfe3f5; line-height: 1.4; }
 .card .lvl { margin-top: auto; font-size: 11px; color: #8fa8c8; letter-spacing: 2px; }
+
+/* Quantum card art: CSS-only illustrations */
+.card .qnote {
+  font-family: 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.35; color: #a9c4dc; text-align: left;
+  border-top: 1px solid color-mix(in srgb, var(--c) 40%, transparent); padding-top: 8px;
+}
+.card .qnote b { display: block; color: var(--c); letter-spacing: 1px; font-size: 11px; margin-bottom: 2px; }
+.art { position: relative; display: block; width: 120px; height: 80px; flex: none; color: var(--c); }
+/* Mirror: a bright axis with an arrow on each side pointing away */
+.art.mirror::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; transform: translateX(-50%);
+  background: currentColor; box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+}
+.art.mirror::after {
+  content: ''; position: absolute; left: 10px; right: 10px; top: 50%; height: 0; transform: translateY(-50%);
+  border-left: 28px solid transparent; border-right: 28px solid transparent; border-top: 0;
+  background:
+    linear-gradient(currentColor, currentColor) left 4px center / 36px 3px no-repeat,
+    linear-gradient(currentColor, currentColor) right 4px center / 36px 3px no-repeat;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+/* Shotgun: a cone of rays from one point */
+.art.shotgun {
+  background: repeating-conic-gradient(from -42deg at 50% 100%, currentColor 0 3deg, transparent 3deg 21deg);
+  -webkit-mask: conic-gradient(from -42deg at 50% 100%, #000 0 84deg, transparent 84deg);
+  mask: conic-gradient(from -42deg at 50% 100%, #000 0 84deg, transparent 84deg);
+  filter: drop-shadow(0 0 8px currentColor);
+}
+.art.shotgun::after {
+  content: ''; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; border-radius: 50%;
+  transform: translateX(-50%); background: currentColor; box-shadow: 0 0 12px currentColor;
+}
+/* Phantom: a faint ghost made of dashed, overlapping rings */
+.art.phantom::before, .art.phantom::after {
+  content: ''; position: absolute; top: 50%; width: 56px; height: 56px; border-radius: 50%;
+  border: 2px dashed currentColor; transform: translateY(-50%); box-shadow: 0 0 12px currentColor;
+}
+.art.phantom::before { left: 14px; opacity: 0.45; }
+.art.phantom::after { right: 14px; opacity: 0.85; }
+/* Link: two nodes joined by a glowing line */
+.art.link {
+  background:
+    radial-gradient(circle at 14px 50%, currentColor 0 9px, transparent 10px),
+    radial-gradient(circle at calc(100% - 14px) 50%, currentColor 0 9px, transparent 10px),
+    linear-gradient(currentColor, currentColor) center / calc(100% - 28px) 3px no-repeat;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .art.phantom::before { animation: ghost 2.4s ease-in-out infinite alternate; }
+  .art.link { animation: pulse 1.8s ease-in-out infinite alternate; }
+}
+@keyframes ghost { to { opacity: 0.9; transform: translateY(-50%) translateX(6px); } }
+@keyframes pulse { to { filter: drop-shadow(0 0 16px currentColor); } }

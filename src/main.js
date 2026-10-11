@@ -6,7 +6,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { CARDS, pickCards } from './cards.js';
+import { pickCards } from './cards.js';
 
 // ---------- DOM ----------
 const $ = (id) => document.getElementById(id);
@@ -238,8 +238,10 @@ function openCards() {
     const b = document.createElement('button');
     b.className = 'card';
     b.style.setProperty('--c', c.color);
-    b.innerHTML = `<span class="key">${i + 1}</span><span class="icon">${c.icon}</span>` +
-      `<span class="name">${c.name}</span><span class="desc">${c.desc}</span>` +
+    const visual = c.art ? `<span class="art ${c.art}" aria-hidden="true"></span>` : `<span class="icon">${c.icon}</span>`;
+    const quantum = c.qnote ? `<span class="qnote"><b>${c.qtag}</b> ${c.qnote}</span>` : '';
+    b.innerHTML = `<span class="key">${i + 1}</span>${visual}` +
+      `<span class="name">${c.name}</span><span class="desc">${c.desc}</span>${quantum}` +
       `<span class="lvl">LEVEL ${(taken[c.id] || 0) + 1} / ${c.max}</span>`;
     b.addEventListener('click', () => chooseCard(i));
     ui.cardsRow.appendChild(b);
