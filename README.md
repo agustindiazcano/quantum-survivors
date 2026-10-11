@@ -27,6 +27,28 @@ Under the hood, your weapon is a 3-qubit register that decides the direction of 
 | Shotgun, Phantom, Shotgun | **100% sector 1 (Death Laser)** | 50% / 50% |
 | Shotgun, Link | 50% sector 0, 50% sector 5, entangled (1.00 bit of entropy) | same distribution, but no entanglement |
 
+## Screenshots
+
+![Gameplay: the ship fires at a wave of enemies, with the minimap and the weapon fan in the HUD](docs/img/gameplay.png)
+
+*Gameplay. The ship fires automatically at waves of tetrahedra, cubes and octahedra. The minimap (with edge dots for off-screen enemies) and the XP bar are in the HUD. The panel at the bottom left is the **weapon fan**: the probability of each of the 8 firing directions for the current build, read from the Qiskit table.*
+
+![The card screen after a wave: three power cards to choose from](docs/img/cards.png)
+
+*Card screen. After every wave you choose one of three cards. Each card is a quantum gate, but the player only sees a friendly name and a visible effect. The order in which you pick them changes the result.*
+
+![The four quantum cards: Mirror, Shotgun, Phantom and Link](docs/img/quantum-cards.png)
+
+*The four quantum cards (open the game with `?preview` to see them with their notes): **Mirror** (NOT, flips a direction bit), **Shotgun** (Hadamard, superposition), **Phantom** (Phase, invisible alone but changes interference) and **Link** (CNOT, entanglement).*
+
+![The Death Laser fired by the Shotgun, Phantom, Shotgun combo](docs/img/death-laser.png)
+
+*The Death Laser. Shotgun, Phantom, Shotgun: the two spreads cancel by interference and all the shots go in one direction. A classical random weapon would still split 50/50.*
+
+![Output of qollab/main.py running on Qollab](docs/img/qollab-run.png)
+
+*`qollab/main.py` running on Qollab: the Qiskit vs classical comparison for each example build, the 1,365-build table and the final check against the table the game uses.*
+
 ## 2. Why does it matter, and who is it for?
 
 Superposition, interference and entanglement are hard to feel from a textbook. This game is for curious players, students and teachers who want to build intuition by playing: the combos that work are the ones that need interference, and the player discovers them by experimenting, not by reading about them. It is also a small, readable example of how to drive game logic from real Qiskit calculations instead of ad-hoc percentages.
