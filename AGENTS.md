@@ -18,7 +18,7 @@ The enemies are plain; **the quantum part is the weapons and powers**, and **eve
 
 ## Stack
 - Plain JavaScript, HTML and CSS. No framework.
-- Either 2D (Canvas) or 3D. If 3D: WebGL through [three.js](https://threejs.org/) for rendering and models. The 2D vs 3D choice is still open.
+- 3D with WebGL through [three.js](https://threejs.org/) (bloom post-processing for the glow). Decided for the PoC; can be revisited.
 - Vite for the dev server (opens the browser on its own) and the build.
 - The game ships as a single monolithic HTML file to keep the work simple (one `index.html` entry point; the build inlines JS and CSS).
 
