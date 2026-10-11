@@ -63,10 +63,13 @@ def demo():
 
 
 def check_table(table):
-    if not TABLE_PATH.exists():
-        say("No shipped table found (data/weapon_table.json).")
+    try:
+        # literal path: Qollab only ships a data file that the code names in a string
+        with open("data/weapon_table.json") as f:
+            shipped = json.load(f)
+    except (OSError, ValueError):
+        say("Shipped table (data/weapon_table.json) not available in this run: check skipped.")
         return
-    shipped = json.loads(TABLE_PATH.read_text())
     same_keys = shipped["builds"].keys() == table["builds"].keys()
     diff = 0.0
     flags = True
