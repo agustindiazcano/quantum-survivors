@@ -55,3 +55,11 @@ Es fácil de programar, súper adictivo de jugar, y a los jueces se les caerá l
 - Estética: colores neón con glow. Enemigos como formas geométricas por ahora; al morir explotan con algún efecto.
 - Puede ser 2D (Canvas) o 3D (WebGL + three.js); todavía no está decidido.
 - Stack simple: JS, HTML, CSS. Un HTML monolito para facilitar el trabajo, Vite para desarrollo.
+
+## Sistema de armas (propuesta v0, a corregir)
+Detalle completo en [docs/WEAPON_SYSTEM.md](docs/WEAPON_SYSTEM.md).
+- Los enemigos son normales (formas geométricas que persiguen). **Lo cuántico son las armas y los poderes.**
+- El arma es un registro de 3 qubits = 8 sectores de 45 grados que decide la dirección de cada disparo. Disparar = medir.
+- Cartas = compuertas en orden de recogida: Espejo (X), Escopeta (H), Fantasma (Z), Vínculo (CNOT). Combo Escopeta + Fantasma + Escopeta = Láser de la Muerte (interferencia).
+- Los cálculos los hace el código que entregamos en Qollab (Python + Qiskit), que genera una tabla JSON que consume el juego. El juego no corre Qiskit en vivo.
+- Cada carta tiene una ilustración hecha solo con CSS y una nota cuántica explicativa corta.

@@ -1,2 +1,139 @@
-html, body { margin: 0; height: 100%; background: #05000f; overflow: hidden; }
-#game { display: block; width: 100%; height: 100%; }
+:root {
+  --cyan: #00f0ff;
+  --magenta: #ff2bd6;
+  --green: #39ff88;
+  --yellow: #ffe94d;
+  --bg: #05000f;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; background: var(--bg); overflow: hidden;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif; color: #e8f9ff; user-select: none;
+}
+#scene, #scene canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.hidden { display: none !important; }
+
+/* HUD */
+#hud { position: fixed; inset: 0; pointer-events: none; }
+.bars { position: absolute; top: 16px; left: 16px; width: min(340px, 45vw); }
+.bar {
+  position: relative; height: 20px; margin-bottom: 8px; border: 1px solid; border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55); overflow: hidden;
+}
+.bar div { height: 100%; width: 100%; transform-origin: left; transition: transform 0.15s; }
+.bar span {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: 1px; text-shadow: 0 0 4px #000;
+}
+.bar.hp { border-color: var(--magenta); box-shadow: 0 0 10px var(--magenta); }
+.bar.hp div { background: linear-gradient(90deg, #ff2b6a, var(--magenta)); }
+.bar.xp { border-color: var(--green); box-shadow: 0 0 10px var(--green); height: 14px; }
+.bar.xp div { background: linear-gradient(90deg, #1fc86a, var(--green)); }
+.wave-info { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); text-align: center; }
+#wave-text { font-size: 26px; font-weight: 900; color: var(--cyan); text-shadow: 0 0 12px var(--cyan); letter-spacing: 3px; }
+#enemies-text { font-size: 14px; color: var(--yellow); text-shadow: 0 0 8px var(--yellow); margin-top: 2px; }
+#minimap {
+  position: absolute; right: 16px; bottom: 16px; border-radius: 50%;
+  border: 2px solid var(--cyan); box-shadow: 0 0 14px var(--cyan), inset 0 0 14px rgba(0, 240, 255, 0.25);
+  background: rgba(0, 10, 25, 0.6);
+}
+#banner {
+  position: fixed; top: 28%; left: 0; right: 0; text-align: center; pointer-events: none;
+  font-size: clamp(32px, 7vw, 80px); font-weight: 900; letter-spacing: 6px;
+  color: #fff; text-shadow: 0 0 10px var(--cyan), 0 0 30px var(--cyan), 0 0 60px var(--magenta);
+  animation: pop 1.6s ease-out forwards;
+}
+@keyframes pop { 0% { opacity: 0; transform: scale(0.7); } 20% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Overlays */
+.overlay {
+  position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; background: radial-gradient(ellipse at center, rgba(10, 0, 40, 0.55), rgba(2, 0, 10, 0.9)); text-align: center; padding: 16px;
+}
+.logo {
+  margin: 0; font-size: clamp(44px, 10vw, 120px); font-weight: 900; line-height: 1; letter-spacing: 8px;
+  color: #fff; text-shadow: 0 0 6px #fff, 0 0 18px var(--cyan), 0 0 40px var(--cyan), 0 0 80px var(--magenta);
+}
+.logo.small { font-size: clamp(36px, 7vw, 80px); color: #ffd0f4; text-shadow: 0 0 10px var(--magenta), 0 0 40px var(--magenta); }
+.tagline { margin: 0; color: var(--magenta); text-shadow: 0 0 10px var(--magenta); letter-spacing: 3px; font-size: 16px; }
+.hint { margin: 0; color: #8fa8c8; font-size: 12px; letter-spacing: 2px; }
+.neon-btn {
+  font: inherit; font-weight: 700; font-size: 22px; letter-spacing: 6px; padding: 14px 54px; cursor: pointer;
+  color: var(--cyan); background: rgba(0, 240, 255, 0.07); border: 2px solid var(--cyan); border-radius: 6px;
+  text-shadow: 0 0 10px var(--cyan); box-shadow: 0 0 16px var(--cyan), inset 0 0 16px rgba(0, 240, 255, 0.3);
+  transition: transform 0.12s, background 0.12s;
+}
+.neon-btn:hover, .neon-btn:focus-visible { background: rgba(0, 240, 255, 0.25); transform: scale(1.06); outline: none; }
+
+/* Cards */
+#cards h2 { margin: 0; font-size: clamp(24px, 4vw, 40px); letter-spacing: 6px; color: #fff; text-shadow: 0 0 14px var(--cyan); }
+#cards-row { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; }
+.card {
+  width: 220px; min-height: 270px; padding: 20px 16px; cursor: pointer; font: inherit; color: #e8f9ff; text-align: center;
+  background: rgba(8, 4, 30, 0.85); border: 2px solid var(--c); border-radius: 10px;
+  box-shadow: 0 0 18px var(--c), inset 0 0 22px color-mix(in srgb, var(--c) 25%, transparent);
+  display: flex; flex-direction: column; align-items: center; gap: 12px; transition: transform 0.15s;
+}
+.card:hover, .card:focus-visible { transform: translateY(-8px) scale(1.04); outline: none; }
+.card .key { font-size: 12px; color: #8fa8c8; letter-spacing: 2px; align-self: flex-end; }
+.card .icon { font-size: 54px; color: var(--c); text-shadow: 0 0 16px var(--c); line-height: 1.1; }
+.card .name { font-weight: 900; font-size: 18px; letter-spacing: 2px; color: var(--c); text-shadow: 0 0 8px var(--c); }
+.card .desc { font-family: 'Segoe UI', sans-serif; font-size: 14px; color: #cfe3f5; line-height: 1.4; }
+.card .lvl { margin-top: auto; font-size: 11px; color: #8fa8c8; letter-spacing: 2px; }
+
+/* Quantum card art: CSS-only illustrations */
+.card .qnote {
+  font-family: 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.35; color: #a9c4dc; text-align: left;
+  border-top: 1px solid color-mix(in srgb, var(--c) 40%, transparent); padding-top: 8px;
+}
+.card .qnote b { display: block; color: var(--c); letter-spacing: 1px; font-size: 11px; margin-bottom: 2px; }
+.art { position: relative; display: block; width: 120px; height: 80px; flex: none; color: var(--c); }
+/* Mirror: a bright axis with an arrow on each side pointing away */
+.art.mirror::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; transform: translateX(-50%);
+  background: currentColor; box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+}
+.art.mirror::after {
+  content: ''; position: absolute; left: 10px; right: 10px; top: 50%; height: 0; transform: translateY(-50%);
+  border-left: 28px solid transparent; border-right: 28px solid transparent; border-top: 0;
+  background:
+    linear-gradient(currentColor, currentColor) left 4px center / 36px 3px no-repeat,
+    linear-gradient(currentColor, currentColor) right 4px center / 36px 3px no-repeat;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+/* Shotgun: a cone of rays from one point */
+.art.shotgun {
+  background: repeating-conic-gradient(from -42deg at 50% 100%, currentColor 0 3deg, transparent 3deg 21deg);
+  -webkit-mask: conic-gradient(from -42deg at 50% 100%, #000 0 84deg, transparent 84deg);
+  mask: conic-gradient(from -42deg at 50% 100%, #000 0 84deg, transparent 84deg);
+  filter: drop-shadow(0 0 8px currentColor);
+}
+.art.shotgun::after {
+  content: ''; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; border-radius: 50%;
+  transform: translateX(-50%); background: currentColor; box-shadow: 0 0 12px currentColor;
+}
+/* Phantom: a faint ghost made of dashed, overlapping rings */
+.art.phantom::before, .art.phantom::after {
+  content: ''; position: absolute; top: 50%; width: 56px; height: 56px; border-radius: 50%;
+  border: 2px dashed currentColor; transform: translateY(-50%); box-shadow: 0 0 12px currentColor;
+}
+.art.phantom::before { left: 14px; opacity: 0.45; }
+.art.phantom::after { right: 14px; opacity: 0.85; }
+/* Link: two nodes joined by a glowing line */
+.art.link {
+  background:
+    radial-gradient(circle at 14px 50%, currentColor 0 9px, transparent 10px),
+    radial-gradient(circle at calc(100% - 14px) 50%, currentColor 0 9px, transparent 10px),
+    linear-gradient(currentColor, currentColor) center / calc(100% - 28px) 3px no-repeat;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .art.phantom::before { animation: ghost 2.4s ease-in-out infinite alternate; }
+  .art.link { animation: pulse 1.8s ease-in-out infinite alternate; }
+}
+@keyframes ghost { to { opacity: 0.9; transform: translateY(-50%) translateX(6px); } }
+@keyframes pulse { to { filter: drop-shadow(0 0 16px currentColor); } }
+
+#lab-box { position: absolute; left: 16px; bottom: 16px; text-align: center; }
+#lab { display: block; border-radius: 50%; border: 2px solid var(--yellow); background: rgba(20, 15, 0, 0.55); box-shadow: 0 0 12px var(--yellow); }
+#lab-text { margin-top: 6px; font-size: 12px; letter-spacing: 2px; color: var(--yellow); text-shadow: 0 0 8px var(--yellow); }

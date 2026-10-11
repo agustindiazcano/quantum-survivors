@@ -6,7 +6,42 @@
     <title>Quantum Survivors</title>
   </head>
   <body>
-    <canvas id="game"></canvas>
+    <div id="scene" aria-hidden="true"></div>
+
+    <div id="hud" class="hidden">
+      <div class="bars">
+        <div class="bar hp"><div id="hp-fill"></div><span id="hp-text"></span></div>
+        <div class="bar xp"><div id="xp-fill"></div><span id="xp-text"></span></div>
+      </div>
+      <div class="wave-info" aria-live="polite">
+        <div id="wave-text">WAVE 1</div>
+        <div id="enemies-text">Enemies left: 0</div>
+      </div>
+      <div id="lab-box"><canvas id="lab" width="130" height="130" aria-label="Weapon direction fan"></canvas><div id="lab-text"></div></div>
+      <canvas id="minimap" width="170" height="170" aria-label="Minimap showing where enemies are"></canvas>
+    </div>
+
+    <div id="banner" class="hidden" aria-live="assertive"></div>
+
+    <section id="menu" class="overlay">
+      <h1 class="logo">QUANTUM<br />SURVIVORS</h1>
+      <p class="tagline">Survive the horde. Build your weapon.</p>
+      <button id="start" class="neon-btn">START</button>
+      <p class="hint">Move: W A S D or arrow keys</p>
+    </section>
+
+    <section id="cards" class="overlay hidden">
+      <h2 id="cards-title">CHOOSE A CARD</h2>
+      <div id="cards-row"></div>
+      <p class="hint">Click a card or press 1, 2, 3</p>
+    </section>
+
+    <section id="gameover" class="overlay hidden">
+      <h2 class="logo small">YOU DIED</h2>
+      <p id="gameover-text" class="tagline"></p>
+      <button id="restart" class="neon-btn">TRY AGAIN</button>
+    </section>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
