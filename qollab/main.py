@@ -82,14 +82,14 @@ def check_table(table):
     say(f"Matches the table used by the game: {'YES' if ok else 'NO'} (max probability difference {diff:.1e})")
 
 
-_skip_next = None  # arguments of a call to ignore once: the platform's repeat of the automatic run
+_ran = False  # Qollab runs the script and then calls main() again (with extra arguments): run only once
 
 
-def main(export=False):
-    global _skip_next
-    if _skip_next == (export,):
-        _skip_next = None
+def main(export=False, *_platform_args, **_platform_kwargs):
+    global _ran
+    if _ran:
         return
+    _ran = True
     t0 = time.time()
     say("QUANTUM SURVIVORS - quantum weapon system")
     say("3 qubits = 8 firing sectors of 45 degrees. Cards are gates. Firing = measuring.")
@@ -111,4 +111,3 @@ def main(export=False):
 
 if __name__ == "__main__":
     main(export="--export" in sys.argv)
-    _skip_next = main.__defaults__  # Qollab may call main() again with the defaults: run only once
