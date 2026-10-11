@@ -19,39 +19,41 @@ export const CARDS = [
 ];
 
 // Quantum cards (see docs/WEAPON_SYSTEM.md). `art` is a CSS-only illustration (.art.<name> in style.css) and
-// `qnote` is the short plain-language quantum explanation. Not wired to the Qiskit table yet, so they only
-// appear with ?preview in the URL and have no effect on the weapon.
+// `qnote` is the short plain-language quantum explanation. They
+// drive the weapon through the Qiskit table (src/weapon.js). They are added to stats.qcards in pick order.
 export const QUANTUM_CARDS = [
-  { id: 'mirror', name: 'MIRROR', art: 'mirror', color: '#00f0ff', max: 1, wip: true,
+  { id: 'mirror', name: 'MIRROR', art: 'mirror', color: '#00f0ff', max: 1,
     desc: 'Flips your fire direction: front becomes back.',
     qtag: 'NOT gate (X)',
     qnote: 'Swaps 0 and 1 on one direction bit, so a shot aimed one way is now aimed the opposite way.',
-    apply: () => {} },
-  { id: 'shotgun', name: 'SHOTGUN', art: 'shotgun', color: '#ffe94d', max: 1, wip: true,
+    apply: (s) => { s.qcards.push('mirror'); } },
+  { id: 'shotgun', name: 'SHOTGUN', art: 'shotgun', color: '#ffe94d', max: 1,
     desc: 'Spreads one shot into a cone of pellets.',
     qtag: 'Hadamard gate (H)',
     qnote: 'Superposition: the shot is in two directions at once, and only picks one when it is measured as it fires.',
-    apply: () => {} },
-  { id: 'phantom', name: 'PHANTOM', art: 'phantom', color: '#b36bff', max: 1, wip: true,
+    apply: (s) => { s.qcards.push('shotgun'); } },
+  { id: 'phantom', name: 'PHANTOM', art: 'phantom', color: '#b36bff', max: 1,
     desc: 'Does nothing by itself. Or does it?',
     qtag: 'Phase gate (Z)',
     qnote: 'Flips the sign of a wave, not a probability, so alone it is invisible. Between two Shotguns the waves cancel and add: interference.',
-    apply: () => {} },
-  { id: 'link', name: 'LINK', art: 'link', color: '#ff2bd6', max: 1, wip: true,
+    apply: (s) => { s.qcards.push('phantom'); } },
+  { id: 'link', name: 'LINK', art: 'link', color: '#ff2bd6', max: 1,
     desc: 'Each shot is paired with an echo shot, double damage.',
     qtag: 'CNOT gate',
     qnote: 'Entanglement: two direction bits become one linked pair. Measuring one tells you the other, even when they point apart.',
-    apply: () => {} },
+    apply: (s) => { s.qcards.push('link'); } },
 ];
+for (const q of QUANTUM_CARDS) q.max = { mirror: 2, shotgun: 3, phantom: 2, link: 2 }[q.id];
 
-const PREVIEW = new URLSearchParams(location.search).has('preview');
-
-export function pickCards(taken, n = 3) {
-  const all = PREVIEW ? [...CARDS, ...QUANTUM_CARDS] : CARDS;
-  const pool = all.filter((c) => (taken[c.id] || 0) < c.max);
+export function pickCards(taken, n = 3, qcount = 0, qmax = 5) {
+  const quantumOpen = qcount < qmax;
+  const pool = [...CARDS, ...(quantumOpen ? QUANTUM_CARDS : [])].filter((c) => (taken[c.id] || 0) < c.max);
   const out = [];
+  // Always offer at least one quantum card while the weapon can still grow.
+  const q = pool.filter((c) => c.art);
+  if (q.length) out.push(pool.splice(pool.indexOf(q[Math.floor(Math.random() * q.length)]), 1)[0]);
   while (out.length < n && pool.length) {
     out.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
   }
-  return out;
+  return out.sort(() => Math.random() - 0.5);
 }

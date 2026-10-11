@@ -7,6 +7,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { pickCards } from './cards.js';
+import { lookup, sampleSector, MAX_QUANTUM_CARDS } from './weapon.js';
 
 // ---------- DOM ----------
 const $ = (id) => document.getElementById(id);
@@ -102,7 +103,7 @@ scene.add(player);
 function newStats() {
   return {
     maxHp: 100, hp: 100, moveSpeed: 7.5, level: 1, xp: 0, xpNext: 5,
-    orbs: 1, orbitRadius: 2.4, orbitSpeed: 2.2, fireRate: 1.1, damage: 2, pierce: 0, projSpeed: 20, magnet: 4,
+    qcards: [], orbs: 1, orbitRadius: 2.4, orbitSpeed: 2.2, fireRate: 1.1, damage: 2, pierce: 0, projSpeed: 20, magnet: 4,
   };
 }
 
@@ -231,7 +232,7 @@ function moveVector() {
 // ---------- Cards ----------
 function openCards() {
   state = 'cards';
-  offeredCards = pickCards(taken, 3);
+  offeredCards = pickCards(taken, 3, stats.qcards.length, MAX_QUANTUM_CARDS);
   ui.cardsTitle.textContent = `WAVE ${wave} CLEARED - CHOOSE A CARD`;
   ui.cardsRow.innerHTML = '';
   offeredCards.forEach((c, i) => {
@@ -258,6 +259,20 @@ function chooseCard(i) {
   ui.cards.classList.add('hidden');
   syncOrbs();
   startWave(wave + 1);
+}
+
+// ---------- Shooting ----------
+const laserMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.5, 2.2, 2.6) });
+function fireShot(from, angle, laser, mult) {
+  const dir = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
+  const mesh = new THREE.Mesh(projGeo, laser ? laserMat : projMat);
+  mesh.position.copy(from);
+  if (laser) { mesh.rotation.y = Math.atan2(dir.x, dir.z); mesh.scale.set(1.6, 1.6, 14); }
+  scene.add(mesh);
+  projectiles.push({
+    mesh, dir, life: laser ? 0.6 : 1.6, pierce: laser ? 999 : stats.pierce,
+    dmg: stats.damage * mult * (laser ? 3 : 1), hit: new Set(), speed: laser ? 45 : stats.projSpeed,
+  });
 }
 
 // ---------- Gameplay update ----------
@@ -322,11 +337,11 @@ function updateGame(dt) {
     if (o.cd <= 0) {
       const target = nearestEnemy(o.mesh.position, 20);
       if (target) {
-        const dir = new THREE.Vector3().subVectors(target.mesh.position, o.mesh.position).setY(0).normalize();
-        const mesh = new THREE.Mesh(projGeo, projMat);
-        mesh.position.copy(o.mesh.position);
-        scene.add(mesh);
-        projectiles.push({ mesh, dir, life: 1.6, pierce: stats.pierce, dmg: stats.damage, hit: new Set() });
+        const aim = Math.atan2(target.mesh.position.z - o.mesh.position.z, target.mesh.position.x - o.mesh.position.x);
+        const w = lookup(stats.qcards);
+        const k = sampleSector(w.probs); // measurement of the Qiskit-computed state
+        fireShot(o.mesh.position, aim + (k * Math.PI) / 4, w.laser, w.echo_mask ? 2 : 1);
+        if (w.echo_mask) fireShot(o.mesh.position, aim + ((k ^ w.echo_mask) * Math.PI) / 4, w.laser, 2);
         o.cd = 1 / stats.fireRate;
       } else {
         o.cd = 0.1;
@@ -337,7 +352,7 @@ function updateGame(dt) {
   // Projectiles
   for (let i = projectiles.length - 1; i >= 0; i--) {
     const p = projectiles[i];
-    p.mesh.position.addScaledVector(p.dir, stats.projSpeed * dt);
+    p.mesh.position.addScaledVector(p.dir, p.speed * dt);
     p.life -= dt;
     let remove = p.life <= 0;
     if (!remove) {
@@ -425,6 +440,25 @@ function updateHud() {
   ui.waveText.textContent = `WAVE ${wave}`;
   ui.enemiesText.textContent = `Enemies left: ${Math.max(0, waveTotal - waveKilled)}`;
   drawMinimap();
+  drawLab();
+}
+
+const lab = $('lab').getContext('2d');
+function drawLab() {
+  const w = lookup(stats.qcards), c = 65, R = 52;
+  lab.clearRect(0, 0, 130, 130);
+  w.probs.forEach((p, k) => {
+    const a = -Math.PI / 2 + (k * Math.PI) / 4; // sector 0 points up = toward the aim
+    const len = 8 + p * (R - 8);
+    lab.strokeStyle = w.laser ? '#7dffff' : '#ffe94d';
+    lab.shadowColor = lab.strokeStyle; lab.shadowBlur = p > 0 ? 8 : 0;
+    lab.globalAlpha = p > 0 ? 0.35 + 0.65 * p : 0.15;
+    lab.lineWidth = p > 0 ? 2 + 4 * p : 1;
+    lab.beginPath(); lab.moveTo(c, c); lab.lineTo(c + Math.cos(a) * len, c + Math.sin(a) * len); lab.stroke();
+  });
+  lab.globalAlpha = 1; lab.shadowBlur = 0;
+  $('lab-text').textContent = (stats.qcards.length ? stats.qcards.map((q) => q[0].toUpperCase()).join(' ') : 'BASE') +
+    (w.laser ? '  LASER' : '') + (w.echo_mask ? '  ECHO' : '');
 }
 
 const MM = { size: 170, range: 42 };

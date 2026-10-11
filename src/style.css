@@ -133,3 +133,7 @@ html, body {
 }
 @keyframes ghost { to { opacity: 0.9; transform: translateY(-50%) translateX(6px); } }
 @keyframes pulse { to { filter: drop-shadow(0 0 16px currentColor); } }
+
+#lab-box { position: absolute; left: 16px; bottom: 16px; text-align: center; }
+#lab { display: block; border-radius: 50%; border: 2px solid var(--yellow); background: rgba(20, 15, 0, 0.55); box-shadow: 0 0 12px var(--yellow); }
+#lab-text { margin-top: 6px; font-size: 12px; letter-spacing: 2px; color: var(--yellow); text-shadow: 0 0 8px var(--yellow); }
