@@ -100,7 +100,7 @@ def main(export=False, *_platform_args, **_platform_kwargs):
     lasers = sum(1 for b in table["builds"].values() if b["laser"])
     links = sum(1 for b in table["builds"].values() if b["echo_mask"])
     say(f"{len(table['builds'])} builds simulated exactly; {lasers} fire a Death Laser, {links} have an entangled echo.")
-    if export:
+    if export is True:
         TABLE_PATH.parent.mkdir(exist_ok=True)
         TABLE_PATH.write_text(json.dumps(table, sort_keys=True, separators=(",", ":")))
         say(f"Table written to {TABLE_PATH}")
