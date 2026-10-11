@@ -29,23 +29,23 @@ Under the hood, your weapon is a 3-qubit register that decides the direction of 
 
 ## Screenshots
 
-![Gameplay: the ship fires at a wave of enemies, with the minimap and the weapon fan in the HUD](docs/img/gameplay.png)
+![Gameplay: the ship fires at a wave of enemies, with the minimap and the weapon fan in the HUD](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/feat/poc-3d/docs/img/gameplay.png)
 
 *Gameplay. The ship fires automatically at waves of tetrahedra, cubes and octahedra. The minimap (with edge dots for off-screen enemies) and the XP bar are in the HUD. The panel at the bottom left is the **weapon fan**: the probability of each of the 8 firing directions for the current build, read from the Qiskit table.*
 
-![The card screen after a wave: three power cards to choose from](docs/img/cards.png)
+![The card screen after a wave: three power cards to choose from](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/feat/poc-3d/docs/img/cards.png)
 
 *Card screen. After every wave you choose one of three cards. Each card is a quantum gate, but the player only sees a friendly name and a visible effect. The order in which you pick them changes the result.*
 
-![The four quantum cards: Mirror, Shotgun, Phantom and Link](docs/img/quantum-cards.png)
+![The four quantum cards: Mirror, Shotgun, Phantom and Link](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/feat/poc-3d/docs/img/quantum-cards.png)
 
 *The four quantum cards (open the game with `?preview` to see them with their notes): **Mirror** (NOT, flips a direction bit), **Shotgun** (Hadamard, superposition), **Phantom** (Phase, invisible alone but changes interference) and **Link** (CNOT, entanglement).*
 
-![The Death Laser fired by the Shotgun, Phantom, Shotgun combo](docs/img/death-laser.png)
+![The Death Laser fired by the Shotgun, Phantom, Shotgun combo](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/feat/poc-3d/docs/img/death-laser.png)
 
 *The Death Laser. Shotgun, Phantom, Shotgun: the two spreads cancel by interference and all the shots go in one direction. A classical random weapon would still split 50/50.*
 
-![Output of qollab/main.py running on Qollab](docs/img/qollab-run.png)
+![Output of qollab/main.py running on Qollab](https://raw.githubusercontent.com/agustindiazcano/quantum-survivors/feat/poc-3d/docs/img/qollab-run.png)
 
 *`qollab/main.py` running on Qollab: the Qiskit vs classical comparison for each example build, the 1,365-build table and the final check against the table the game uses.*
 
@@ -60,7 +60,7 @@ Superposition, interference and entanglement are hard to feel from a textbook. T
 - The result is exported to `qollab/data/weapon_table.json`. **The game reads that precomputed table; it does not run Qiskit live in the browser and it does not re-implement the gate rules.** Each shot samples a direction from the stored probabilities.
 - `qollab/main.py` is the entry point on Qollab: it prints the example builds (Qiskit vs classical), rebuilds the whole table and checks that it matches the table shipped with the game.
 
-Design notes and open questions: [docs/WEAPON_SYSTEM.md](docs/WEAPON_SYSTEM.md). Hackathon rules: [docs/RULES.md](docs/RULES.md).
+Design notes and open questions: [docs/WEAPON_SYSTEM.md](https://github.com/agustindiazcano/quantum-survivors/blob/feat/poc-3d/docs/WEAPON_SYSTEM.md). Hackathon rules: [docs/RULES.md](https://github.com/agustindiazcano/quantum-survivors/blob/feat/poc-3d/docs/RULES.md).
 
 **What we contribute:** a mapping from quantum gates to game mechanics where interference and entanglement have a visible effect, a table of all 1,365 builds computed with Qiskit, and a playable 3D game that uses it.
 
@@ -102,4 +102,4 @@ Competing at the **UNICEN** node (Universidad Nacional del Centro de la Provinci
 
 ## License
 
-MIT. See [LICENSE](LICENSE) (also copied in `qollab/LICENSE`). Copyright (c) 2026 Agustin Diaz Cano and Baltazar Salerno.
+MIT. See [LICENSE](https://github.com/agustindiazcano/quantum-survivors/blob/feat/poc-3d/LICENSE) (also copied in `qollab/LICENSE`). Copyright (c) 2026 Agustin Diaz Cano and Baltazar Salerno.
