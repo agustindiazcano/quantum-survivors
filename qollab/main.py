@@ -15,7 +15,11 @@ from pathlib import Path
 from qgame.table import MAX_CARDS, build_table, card_key
 from qgame.weapon import simulate
 
-TABLE_PATH = Path(__file__).resolve().parent / "data" / "weapon_table.json"
+try:
+    HERE = Path(__file__).resolve().parent
+except NameError:  # Qollab runs the file with exec(): __file__ is not defined
+    HERE = Path.cwd()
+TABLE_PATH = HERE / "data" / "weapon_table.json"
 ANGLES = [f"{45 * k:3d}" for k in range(8)]
 
 DEMOS = [
@@ -75,7 +79,14 @@ def check_table(table):
     say(f"Matches the table used by the game: {'YES' if ok else 'NO'} (max probability difference {diff:.1e})")
 
 
+_skip_next = None  # arguments of a call to ignore once: the platform's repeat of the automatic run
+
+
 def main(export=False):
+    global _skip_next
+    if _skip_next == (export,):
+        _skip_next = None
+        return
     t0 = time.time()
     say("QUANTUM SURVIVORS - quantum weapon system")
     say("3 qubits = 8 firing sectors of 45 degrees. Cards are gates. Firing = measuring.")
@@ -97,3 +108,4 @@ def main(export=False):
 
 if __name__ == "__main__":
     main(export="--export" in sys.argv)
+    _skip_next = main.__defaults__  # Qollab may call main() again with the defaults: run only once
