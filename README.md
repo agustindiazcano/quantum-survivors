@@ -94,7 +94,7 @@ Plain JavaScript, HTML and CSS, 3D with three.js (WebGL, bloom glow). Vite for d
 Competing at the **UNICEN** node (Universidad Nacional del Centro de la Provincia de Buenos Aires, Argentina): https://exa.unicen.edu.ar/ · Track: *Professional*
 
 **Team Salta**
-- Agustin Diaz-Cano, MS Candidate, Systems Engineering (UTN)
+- Agustin Diaz-Cano, MS Candidate, Systems Engineering (UTN FRBA, Argentina)
 - Baltazar Salerno, Frontend Developer
 
 ## Disclosure
